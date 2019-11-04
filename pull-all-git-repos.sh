@@ -24,12 +24,16 @@ control_c()
 
 usage_help() {
 	printf "$USAGE_LINE"
-	printf "By default this will pull all repos and attempt to pull upstream repos on forks that have master checked out.\n"
+	printf "By default this will pull all repos in a directory and attempt to pull \n"
+	printf "upstream repos on clean forks that have master checked out locally. If \n"
+	printf "updating a fork from the upstream master branch succeeds then the changes \n"
+	printf "will be pushed to your fork.\n"
 	printf "Options: \n"
-	printf "    -n - don't pull repo for forks, just pull checked out branch from the fork\n"
+	printf "  -n - don't pull repo for forks, just pull checked out branch from the fork\n"
 	printf "\n\n"
 	exit 1
 }
+
 
 
 do_not_process_forks=''
