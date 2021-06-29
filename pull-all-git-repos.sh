@@ -15,8 +15,6 @@ branch_names=("master", "main")
 #get the pwd to return to after we are done refreshing
 curdir=`pwd`
 
-# TODO: support main as branch (due to gh changes)
-
 ##########################################################################################
 USAGE_LINE="Usage: pull-all-git-repos.sh [-h] [-n]\n\n"
 
