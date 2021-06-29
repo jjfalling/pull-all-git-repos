@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
+
 #easy way to update all of your repos in one dir. Just incase you are like me
 # and need to do this every morning
 
 #change this to your git directory
-gitbase=/Users/jeremy/github/
+gitbase=/home/jeremy/github/
 
-# change this to the name of the remote repo for forks. note this only supports master
+# change this to the name of the remote repo for forks
 upstream_name='upstream'
+
+# array of branches to try, in order
+branch_names=("master", "main")
 
 #get the pwd to return to after we are done refreshing
 curdir=`pwd`
+
+# TODO: support main as branch (due to gh changes)
 
 ##########################################################################################
 USAGE_LINE="Usage: pull-all-git-repos.sh [-h] [-n]\n\n"
@@ -66,10 +72,13 @@ is_repo_a_fork() {
 		return 1
 	fi
 	
-	on_master=''
-	if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
-		on_master=true
-	fi
+	main_branch_name=''
+	for name in "${branch_names[@]}"
+    do
+      if [[ $(git rev-parse --abbrev-ref HEAD) == "$name" ]]; then
+          main_branch_name=$name
+      fi
+    done
 	
 	clean_branch=''
 	# this does not care about untracked files
@@ -77,19 +86,21 @@ is_repo_a_fork() {
 		clean_branch=true
 	fi
 	
-	if [[ $upstream_exists && $on_master && ! $clean_branch ]]; then
+	if [[ $upstream_exists && $main_branch_name && ! $clean_branch ]]; then
 		printf "Not pulling upstream as this branch is dirty\n"
 		return 1
 	fi 
 	
-	if [[ $upstream_exists && $on_master && $clean_branch ]]; then
+	if [[ $upstream_exists && $main_branch_name && $clean_branch ]]; then
 		# on master and there is an upstream. pull it
-		git pull $upstream_name master
+		git pull $upstream_name $main_branch_name
 		# also push to fork master
 		git push
 		return 0
 	else
-		printf "Not pulling upstream as this is a fork but not on master\n"
+		printf "Not pulling upstream as this is a fork but not on one of the branches: "
+		printf "%s " "${branch_names[@]}"
+		printf "\n"
 		return 1
 	fi
 }
