@@ -1,4 +1,1 @@
-pull-all-git-repos
-==============
-
-Easy/lazy way to pull all of your git repos in one directory
+This project has been moved to Codeberg: [https://codeberg.org/jjfalling/pull-all-git-repos](https://codeberg.org/jjfalling/pull-all-git-repos)
